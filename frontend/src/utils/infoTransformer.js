@@ -66,15 +66,29 @@ export const dataTransform = (data) => {
     let dataWord = '';
 
     for (let i = 0; i < 4; i++) {
-        year = year + data[i];
+        if (data === '' || data === null) {
+            year = ''
+        } else {
+            year = year + data[i];
+        }
     }
 
     for (let i = 5; i < 7; i++) {
-        mounth = mounth + data[i];
+        if (data === '' || data === null) {
+            mounth = ''
+        } else {
+            mounth = mounth + data[i];
+        }
     }
 
+    console.log(mounth);
+
     for (let i = 8; i < 10; i++) {
-        day = day + data[i];
+        if (data === '' || data === null) {
+            day = ''
+        } else {
+            day = day + data[i];
+        }
     }
 
     mounthWord = mounthConverter(mounth);
@@ -88,6 +102,9 @@ export const textTransform = (text) => {
     let textWord = '';
 
     if (text === null ) {
+        textWord = 'Go to the resource to learn more';
+    } else
+    if (text === undefined) {
         textWord = 'Go to the resource to learn more';
     } else
     if (text.length >= 145) {
@@ -111,6 +128,10 @@ export const titleTransform = (text) => {
     }
 
     return textWord;
+}
+
+export const keyWordTransform = (word) => {
+    return (word[0].toUpperCase() + word.substr(1));
 }
 
 

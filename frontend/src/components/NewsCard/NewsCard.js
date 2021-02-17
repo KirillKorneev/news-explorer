@@ -1,5 +1,6 @@
 import React from 'react';
 import './NewsCard.css';
+import * as infoTransform from '../../utils/infoTransformer.js';
 
 function NewsCard(props) {
 
@@ -22,14 +23,22 @@ function NewsCard(props) {
     function handleClick() {
         if (props.isLogin) {
             setIsSaved(!isSaved);
+            props.saveCard(
+                {
+                    title: props.title,
+                    text: props.text,
+                    date: props.data,
+                    source: props.source,
+                    link: props.link,
+                    image: props.photo
+                }
+            )
         }
     }
 
     function deleteCard() {
-        setIsDeleted(true);
+        props.deleteArticle(props.id);
     }
-
-    console.log(props.text);
 
     return (
         <li className={`element ${isDeleted ? 'element_hidden' : ''}`}>
@@ -45,7 +54,7 @@ function NewsCard(props) {
             </div>
             {
                 !props.isMain ? 
-                <p className="element__key-word">keyWord</p> : ''
+                <p className="element__key-word">{infoTransform.keyWordTransform(props.keyWord)}</p> : ''
             }
             {
                 props.isMain ?

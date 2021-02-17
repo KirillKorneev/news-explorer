@@ -6,6 +6,7 @@ function Search(props) {
     const [isHovered, setIsHovered] = React.useState(false);
     const [text, setText] = React.useState('');
 
+
     function handleSubmit(evt) {
         evt.preventDefault();
         setIsHovered(false);
@@ -28,7 +29,7 @@ function Search(props) {
 
     return (
         <form className="search">
-            <input id="search-input" name="inputSearch" required type="text" minLength="2" maxLength="200" placeholder="Введите тему новости" className="search__input" value={text} onChange={handleChangeInput}/>
+            <input ref={props.keyWordInput} id="search-input" name="inputSearch" required type="text" minLength="2" maxLength="200" placeholder="Введите тему новости" className="search__input" value={text} onChange={handleChangeInput}/>
             <button className={`search__button ${isTapped ? 'search__button_tapped' : ''} ${isHovered ? 'search__button_hover' : ''}`} onMouseEnter={handleHoverEnter} onMouseLeave={handleHoverLeave} onClick={handleSubmit} >Искать</button>
         </form>
     );

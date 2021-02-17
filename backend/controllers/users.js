@@ -70,8 +70,8 @@ const newUser = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  //console.log(email);
-  //console.log(password);
+  console.log(email);
+  console.log(password);
 
   if (!email || !password) {
     const error = new InvalidError('Invalid login or password');

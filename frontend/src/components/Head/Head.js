@@ -37,6 +37,7 @@ function Head(props) {
                         <p className="head__text">Находите самые свежие статьи на любую тему и сохраняйте в своём личном кабинете.</p>
                         <Search 
                             searchNews = {props.searchNews}
+                            keyWordInput = {props.keyWordInput}
                         />
                     </div>
                 </section>

@@ -18,11 +18,13 @@ import { Switch, Route } from 'react-router-dom';
 import { newsApi } from '../../utils/NewsApi.js';
 import { mainApi } from '../../utils/MainApi.js';
 import { getToken, setToken, removeToken } from '../../utils/token.js';
+import * as transform from '../../utils/infoTransformer.js';
 import data from '../../data/data.js';
 
 function App() {
 
   const [cards, setCards] = React.useState([]);
+  const [articles, setArticles] = React.useState([]);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = React.useState(false);
   const [isLoginPopupOpen, setIsLoginPopupOpen] = React.useState(false);
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = React.useState(false);
@@ -33,7 +35,10 @@ function App() {
   const [isResult, setIsResult] = React.useState(false);
   const [isNotFound, setIsNotFound] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState('Юзер');
+  const [keyWords, setKeyWords] = React.useState([]);
+  const [keyString, setKeyString] = React.useState('');
   const history = useHistory();
+  const keyWordInput = React.useRef(null);
 
   React.useEffect(()=>{
     document.addEventListener('keydown', (e) => {
@@ -47,6 +52,14 @@ function App() {
       }
     })
   }, [])
+
+  function getArticles() {
+    mainApi.getCards(getToken())
+      .then((res) => {
+        setArticles(res);
+      })
+      .catch((err) => console.log(err));
+  }
 
   function tokenCheck() {
     const jwt = getToken();
@@ -104,6 +117,52 @@ function App() {
     .finally(() => {
       setIsSearching(false);
     });
+  }
+
+  function isContainSameElements(array, word) {
+    for (let i = 0; i < word.length; i++) {
+      if (array[i] === word) {
+        return true;
+      }
+      return false;
+    }
+  }
+
+  function keyWordsArray() {
+    getArticles();
+    const words = [];
+    for (let i = 0; i < articles.length; i++) {
+      if (!isContainSameElements(words, articles[i].keyword)) {
+        words.push(articles[i].keyword);
+      }
+    }
+    setKeyWords(words);
+    console.log(keyWords);
+  }
+
+  React.useEffect(()=>{
+    getArticles();
+    keyWordsArray();
+    console.log(keyWords);
+  }, [])
+
+  function deleteArticle(card) {
+    console.log(card);
+    mainApi.deleteCard(card)
+    .then(() => {
+      const newCards = articles.filter((c) => c._id !== card);
+      setArticles(newCards);
+    })
+    .catch((err) => {
+      console.log(`Ошибка ${err}`);
+    });
+  }
+
+  function saveCard(cardInfo) {
+    mainApi.saveNewsCard(cardInfo, keyWordInput, getToken())
+      .then((res) => {
+      })
+      .catch((err) => console.log(err));
   }
 
   function changeNumberOfCards() {
@@ -199,7 +258,6 @@ function App() {
     history.push('/');
   }
 
-  console.log(isLogin);
 
   return (
     <>
@@ -212,13 +270,16 @@ function App() {
           searchNews = {searchNews}
           unLogin = {unLogin}
           menuOpen = {handleMenuOpen}
+          keyWordInput = {keyWordInput}
         />
         <Switch>
           <ProtectedRoute
-            path="/saved-news"
-            isLogin={isLogin}
-            cards={cards}
-            component={SavedCards}
+            path = "/saved-news"
+            isLogin = {isLogin}
+            component = {SavedCards}
+            setArticles = {setArticles}
+            articles = {articles}
+            deleteArticle = {deleteArticle}
           />
           <Route path="/">
             <main className="main">
@@ -232,6 +293,7 @@ function App() {
                   count = {numberOfCards}
                   isLogin = {isLogin}
                   changeNumberOfCards = {changeNumberOfCards}
+                  saveCard = {saveCard}
                 /> : ''
               }
               {

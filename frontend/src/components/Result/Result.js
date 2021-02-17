@@ -12,6 +12,7 @@ function Result(props) {
                     cards = {props.cards}
                     count = {props.count}
                     isLogin = {props.isLogin}
+                    saveCard = {props.saveCard}
                 />
                 <div className="result__button-place">
                     <button className="result__button" onClick={props.changeNumberOfCards}>Показать еще</button>

@@ -9,13 +9,6 @@ function CardList(props) {
     <ul className="elements">
       {
         props.cards.slice(0, props.count).map((card) => 
-          /*console.log(card)
-          console.log(card.urlToImage);
-          console.log(infoTransform.dataTransform(card.publishedAt));
-          console.log(infoTransform.titleTransform(card.title));
-          console.log(infoTransform.textTransform(card.content));
-          console.log(card.source.name);
-          console.log(card.url);*/
           <NewsCard 
             photo = {card.urlToImage}
             data = {infoTransform.dataTransform(card.publishedAt)}
@@ -25,6 +18,7 @@ function CardList(props) {
             link = {card.url}
             key = {card.url}
             //*keyWord = {card.keyWord}*/
+            saveCard = {props.saveCard}
             isMain = {true}
             isLogin = {props.isLogin}
           />

@@ -1,6 +1,7 @@
 import React from 'react';
 import './NewsCard.css';
 import * as infoTransform from '../../utils/infoTransformer.js';
+import { Link } from 'react-router-dom';
 
 function NewsCard(props) {
 
@@ -22,17 +23,21 @@ function NewsCard(props) {
 
     function handleClick() {
         if (props.isLogin) {
-            setIsSaved(!isSaved);
-            props.saveCard(
-                {
-                    title: props.title,
-                    text: props.text,
-                    date: props.data,
-                    source: props.source,
-                    link: props.link,
-                    image: props.photo
-                }
-            )
+            if (props.isSaved) {
+                return;
+            } else {
+                setIsSaved(!isSaved);
+                props.saveCard(
+                    {
+                        title: props.title,
+                        text: props.text,
+                        date: props.data,
+                        source: props.source,
+                        link: props.link,
+                        image: props.photo
+                    }
+                )
+            }
         }
     }
 
@@ -42,7 +47,9 @@ function NewsCard(props) {
 
     return (
         <li className={`element ${isDeleted ? 'element_hidden' : ''}`}>
-            <img className="element__photo" src={props.photo} alt={`${props.title}`} />
+            <Link to={`${props.link}`}>
+                <img className="element__photo" src={props.photo} alt={`${props.title}`} />
+            </Link>
             <div className="element__info">
                 <p className="element__data">{props.data}</p>
                 <h2 className="element__title">{props.title}</h2>
@@ -58,7 +65,7 @@ function NewsCard(props) {
             }
             {
                 props.isMain ?
-                <button type="button" className={`element__bookmark ${isSaved ? `element__bookmark_blue` : ''} `} onClick={handleClick} onMouseEnter={handleEnter} onMouseLeave={handleLeave} aria-label="Сохранить"></button> :
+                <button type="button" className={`element__bookmark ${isSaved ? `element__bookmark_blue` : ''} ${props.isSaved ? `element__bookmark_blue` : ''} `} onClick={handleClick} onMouseEnter={handleEnter} onMouseLeave={handleLeave} aria-label="Сохранить"></button> :
                 <button type="button" className={`element__bookmark element__bookmark_delete`} onClick={deleteCard} aria-label='Удалить'></button>
             }
             

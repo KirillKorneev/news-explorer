@@ -19,7 +19,11 @@ function Head(props) {
                         menuOpen = {props.menuOpen}
                         isMain = {false}
                     />
-                    <SavedInfo />
+                    <SavedInfo 
+                        keyWords = {props.keyWords}
+                        keyWordsArray = {props.keyWordsArray}
+                        articles = {props.articles}
+                    />
                 </section>
             </Route>
             <Route path="/">

@@ -81,8 +81,6 @@ export const dataTransform = (data) => {
         }
     }
 
-    console.log(mounth);
-
     for (let i = 8; i < 10; i++) {
         if (data === '' || data === null) {
             day = ''
@@ -108,7 +106,7 @@ export const textTransform = (text) => {
         textWord = 'Go to the resource to learn more';
     } else
     if (text.length >= 145) {
-        textWord = textWord + text.substring(0, 145) + '...';
+        textWord = textWord + text.substring(0, 140) + '...';
     } 
     else {
         textWord = text;
@@ -134,4 +132,26 @@ export const keyWordTransform = (word) => {
     return (word[0].toUpperCase() + word.substr(1));
 }
 
+export const endingTransform = (n) => {
+    if (n < 10) {
+        if (n === 1) {
+            return "сохраненная статья";
+        }
+        if (n === 2 || n === 3 || n === 4) {
+            return "сохраненных статьи";
+        }
+        if (n === 5 || n === 6 || n === 7 || n === 8 || n === 9 || n === 0) {
+            return "сохраненных статей";
+        }
+    }
+    if (n%10 === 1) {
+        return "сохраненная статья";
+    }
+    if (n%10 === 2 || n%10 === 3 || n%10 === 4) {
+        return "сохраненныx статьи";
+    }
+    if (n%10 === 5 || n%10 === 6 || n%10 === 7 || n%10 === 8 || n%10 === 9 || n%10 === 0) {
+        return "сохраненных статей";
+    }
+}
 

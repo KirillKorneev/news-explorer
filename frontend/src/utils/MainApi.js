@@ -7,7 +7,6 @@ class MainApi {
     }
 
     register(email, name, password) {
-        console.log('hi');
         return fetch(`${this.baseURL}/signup`, {
             method: 'POST',
             headers: {
@@ -16,12 +15,9 @@ class MainApi {
             body: JSON.stringify({ email, password, name })
         })
         .then((res) => {
+            console.log(res);
             return res.json();
         })
-        .then((res) => {
-            console.log(res);
-            return res;
-        });
     }
 
     authorize(email, password) {

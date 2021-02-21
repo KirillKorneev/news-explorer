@@ -4,6 +4,15 @@ import { CardList } from '../CardList/CardList.js';
 
 function Result(props) {
 
+    function isShowButton() {
+        if (props.cards.length !== props.count) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     return (
         <section className="result">
             <div className="result__content">
@@ -13,9 +22,13 @@ function Result(props) {
                     count = {props.count}
                     isLogin = {props.isLogin}
                     saveCard = {props.saveCard}
+                    keyWordsArray = {props.keyWordsArray}
+                    isSaved = {props.isSaved}
                 />
                 <div className="result__button-place">
-                    <button className="result__button" onClick={props.changeNumberOfCards}>Показать еще</button>
+                    {
+                        isShowButton() ? <button className="result__button" onClick={props.changeNumberOfCards}>Показать еще</button> : ''
+                    } 
                 </div>
             </div>
         </section>

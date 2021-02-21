@@ -6,8 +6,7 @@ import * as infoTransform from '../../utils/infoTransformer.js';
 
 function SavedCards(props) {
 
-    console.log(props.articles);
-
+    props.setIsResult(false);
     return (
         <section className="saved-cards">
             <ul className="saved-cards__content">

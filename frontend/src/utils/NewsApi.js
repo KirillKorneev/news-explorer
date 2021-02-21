@@ -6,7 +6,7 @@ class NewsApi {
     }
 
     getItems(keyword) { 
-        return fetch(`${this.baseURL}/top-headlines?country=us&category=${keyword}&apiKey=587d698641bf47fb8bb5ac9e28e58a88`, {
+        return fetch(`${this.baseURL}/everything?q=${keyword}&apiKey=587d698641bf47fb8bb5ac9e28e58a88`, {
             headers: {
                 ...this.headers
             }

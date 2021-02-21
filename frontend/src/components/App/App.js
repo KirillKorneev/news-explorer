@@ -35,6 +35,8 @@ function App() {
   const [isResult, setIsResult] = React.useState(false);
   const [isNotFound, setIsNotFound] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState('Юзер');
+  const [isError, setIsError] = React.useState(false);
+  const [errorName, setErrorName] = React.useState('');
   const [keyWords, setKeyWords] = React.useState([]);
   const [keyString, setKeyString] = React.useState('');
   const history = useHistory();
@@ -91,10 +93,20 @@ function App() {
     tokenCheck();
   }, []);
 
+  function isSaved(newsArticle) {
+    for (let j = 0; j < articles.length; j++) {
+      if(newsArticle.url === articles[j].link) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function searchNews(keyword) {
     setIsNotFound(false);
     setIsResult(false);
     setIsSearching(true);
+    getArticles();
     newsApi.getItems(keyword)
     .then((res) => {
       if (res.totalResults === 0) {
@@ -129,7 +141,11 @@ function App() {
   }
 
   function keyWordsArray() {
-    getArticles();
+    mainApi.getCards(getToken())
+      .then((res) => {
+        setArticles(res);
+      })
+      .catch((err) => console.log(err));
     const words = [];
     for (let i = 0; i < articles.length; i++) {
       if (!isContainSameElements(words, articles[i].keyword)) {
@@ -137,17 +153,14 @@ function App() {
       }
     }
     setKeyWords(words);
-    console.log(keyWords);
   }
 
   React.useEffect(()=>{
     getArticles();
     keyWordsArray();
-    console.log(keyWords);
   }, [])
 
   function deleteArticle(card) {
-    console.log(card);
     mainApi.deleteCard(card)
     .then(() => {
       const newCards = articles.filter((c) => c._id !== card);
@@ -161,6 +174,8 @@ function App() {
   function saveCard(cardInfo) {
     mainApi.saveNewsCard(cardInfo, keyWordInput, getToken())
       .then((res) => {
+        setArticles([...articles, res.data]);
+        keyWordsArray();
       })
       .catch((err) => console.log(err));
   }
@@ -198,6 +213,8 @@ function App() {
     setIsLoginPopupOpen(false);
     setIsSuccessPopupOpen(false);
     setIsMenuOpen(false);
+    //setIsError(false);
+    //setErrorName(false);
   }
 
   function handleLogin(userDataIn) {
@@ -208,14 +225,15 @@ function App() {
   function register(email, name, password) {
     mainApi.register(email, name, password)
       .then((res) => {
+        console.log(res);
         if (res.message !== "This user already exists") {
           setIsRegisterPopupOpen(false);
           setIsSuccessPopupOpen(true);
         }
         else {
-          console.log("This user already exists");
           setIsLogin(false);
         }
+        return res;
       })
       .catch((err) => console.log(err));
   }
@@ -271,6 +289,9 @@ function App() {
           unLogin = {unLogin}
           menuOpen = {handleMenuOpen}
           keyWordInput = {keyWordInput}
+          keyWords = {keyWords}
+          keyWordsArray = {keyWordsArray}
+          articles = {articles}
         />
         <Switch>
           <ProtectedRoute
@@ -280,6 +301,7 @@ function App() {
             setArticles = {setArticles}
             articles = {articles}
             deleteArticle = {deleteArticle}
+            setIsResult = {setIsResult}
           />
           <Route path="/">
             <main className="main">
@@ -294,6 +316,8 @@ function App() {
                   isLogin = {isLogin}
                   changeNumberOfCards = {changeNumberOfCards}
                   saveCard = {saveCard}
+                  isSaved = {isSaved}
+                  //keyWordsArray = {keyWordsArray}
                 /> : ''
               }
               {

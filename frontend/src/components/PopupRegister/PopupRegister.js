@@ -101,6 +101,7 @@ function PopupRegister(props) {
             [name]: value
         }))
     }
+
     function handleSubmit(e) {
         e.preventDefault();
         const { email, name, password } = data;
@@ -109,8 +110,7 @@ function PopupRegister(props) {
             return;
         }
 
-        props.register(email, name, password);
-
+        props.register(email, name, password)
         setData({
             email: '',
             name: '',
